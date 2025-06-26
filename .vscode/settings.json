@@ -1,0 +1,17 @@
+{
+  "dart.flutterSdkPath": ".fvm/versions/3.32.1",
+  "dart.enableSdkFormatter": true,
+  "dart.lineLength": 80,
+  "dart.analysisExcludedFolders": [
+    "build",
+    ".dart_tool"
+  ],
+  "dart.openDevTools": "flutter",
+  "editor.formatOnSave": true,
+  "editor.rulers": [80],
+  "files.exclude": {
+    "**/.dart_tool": true,
+    "**/.packages": true,
+    "**/build": true
+  }
+}
