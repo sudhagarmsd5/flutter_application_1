@@ -1,20 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_application_1/app_routes.dart';
 
-class HelloWorldApp extends StatelessWidget {
-  const HelloWorldApp({super.key});
+class MainApp extends StatelessWidget {
+  const MainApp({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
-      home: Scaffold(
-        body: Center(
-          child: Text('Hello World'),
-        ),
-      ),
+    return MaterialApp.router(
+      routerConfig: appRoutes,
     );
   }
 }
 
 void main() {
-  runApp(const HelloWorldApp());
+  runApp(const MainApp());
 }
