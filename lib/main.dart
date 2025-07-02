@@ -8,6 +8,9 @@ class MainApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp.router(
       routerConfig: appRoutes,
+      builder: (context, child) {
+        return SafeArea(child: child ?? const SizedBox.shrink());
+      },
     );
   }
 }
