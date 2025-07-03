@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_application_1/core/contants/app_colors.dart';
-import 'package:go_router/go_router.dart';
+import 'package:flutter_application_1/core/core.dart';
 
 class HomeTodo extends StatefulWidget {
   const HomeTodo({super.key});
@@ -20,14 +19,7 @@ class _HomeTodo extends State<HomeTodo> {
             Container(
               alignment: Alignment.centerLeft,
               padding: EdgeInsets.symmetric(horizontal: 20, vertical: 20),
-              child: Text(
-                'To-Do List',
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 32,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
+              child: AppTextStyles().homeTitle,
             ),
             Expanded(
               child: Container(
@@ -64,16 +56,22 @@ class _HomeTodo extends State<HomeTodo> {
                               ),
                               title: Text('data'),
                               subtitle: Text('12'),
+                              onTap: () {
+                                Navigator.pushNamed(
+                                  context,
+                                  '${AppRoutes.todoEdit}$index',
+                                );
+                              },
                             ),
                           );
                         },
                       ),
                       Positioned(
-                        bottom: 16,
+                        bottom: 30,
                         right: 16,
                         child: FloatingActionButton(
                           onPressed: () {
-                            context.push('/addTodo');
+                            Navigator.pushNamed(context, AppRoutes.todoAdd);
                           },
                           backgroundColor: AppColors.secondaryColor,
                           child: Icon(Icons.add, color: Colors.white),

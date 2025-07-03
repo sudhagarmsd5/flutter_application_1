@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_application_1/app_routes.dart';
+import 'package:flutter_application_1/core/core.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -13,7 +13,8 @@ class _SplashScreen extends State<SplashScreen> {
   void initState() {
     super.initState();
     Future.delayed(const Duration(seconds: 3), () {
-      appRoutes.go('/homeTodo');
+      if (!mounted) return;
+      Navigator.pushReplacementNamed(context, AppRoutes.todoHome);
     });
   }
 
@@ -26,10 +27,7 @@ class _SplashScreen extends State<SplashScreen> {
           children: [
             Icon(Icons.flutter_dash, size: 100, color: Colors.blue),
             const SizedBox(height: 24),
-            const Text(
-              'Welcome to My App',
-              style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-            ),
+            AppTextStyles().splashScreenTitle,
             const SizedBox(height: 16),
             const CircularProgressIndicator(),
           ],

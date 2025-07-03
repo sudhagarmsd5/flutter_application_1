@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_application_1/core/contants/app_colors.dart';
-import 'package:go_router/go_router.dart';
+import 'package:flutter_application_1/core/core.dart';
+
 import 'package:reactive_forms/reactive_forms.dart';
 
 class AddEditTodo extends StatefulWidget {
   final String? todoId;
-  const AddEditTodo({super.key,this.todoId});
+  const AddEditTodo({super.key, this.todoId});
 
   @override
   State<AddEditTodo> createState() => _AddEditTodoState();
@@ -15,8 +15,27 @@ class _AddEditTodoState extends State<AddEditTodo> {
   final FormGroup form = FormGroup({
     'taskName': FormControl<String>(validators: [Validators.required]),
     'description': FormControl<String>(),
-    'dueDate': FormControl<DateTime>(),
+    'dueDate': FormControl<DateTime>(validators: [Validators.required]),
+    'complete': FormControl<bool>(value: false),
   });
+
+  var isEditTodoForm = false;
+
+  @override
+  void initState() {
+    super.initState();
+    print("TODO ID: ${widget.todoId}");
+    if (widget.todoId != null) {
+      isEditTodoForm = true;
+      final mockTodo = {
+        'taskName': 'Sample Task',
+        'description': 'Sample Description',
+        'dueDate': DateTime.now(),
+        'complete': true,
+      };
+      form.patchValue(mockTodo);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -33,7 +52,10 @@ class _AddEditTodoState extends State<AddEditTodo> {
                 children: [
                   GestureDetector(
                     onTap: () {
-                      context.go('/homeTodo');
+                      Navigator.pushReplacementNamed(
+                        context,
+                        AppRoutes.todoHome,
+                      );
                     },
                     child: Icon(
                       Icons.arrow_back,
@@ -42,14 +64,7 @@ class _AddEditTodoState extends State<AddEditTodo> {
                     ),
                   ),
                   SizedBox(width: 10),
-                  Text(
-                    'Add New Task',
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 32,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
+                  AppTextStyles().addEditTitle(isEditTodoForm),
                 ],
               ),
             ),
@@ -107,6 +122,11 @@ class _AddEditTodoState extends State<AddEditTodo> {
                                   border: OutlineInputBorder(
                                     borderRadius: BorderRadius.zero,
                                   ),
+                                  errorText:
+                                      form.control('dueDate').invalid &&
+                                          form.control('dueDate').touched
+                                      ? 'Due date is required'
+                                      : null,
                                 ),
                                 child: Text(
                                   picker.value == null
@@ -116,18 +136,71 @@ class _AddEditTodoState extends State<AddEditTodo> {
                               ),
                             ),
                           ),
-                          SizedBox(height: 50),
 
-                          ElevatedButton(
-                            onPressed: () {
-                              if (form.valid) {
-                                print(form.value);
-                              } else {
-                                form.markAllAsTouched();
-                              }
-                            },
-                            child: Text('Submit'),
-                          ),
+                          ...(isEditTodoForm
+                              ? [
+                                  SizedBox(height: 50),
+                                  Padding(
+                                    padding: const EdgeInsets.only(
+                                      bottom: 30.0,
+                                    ),
+                                    child: Row(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.center,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Text(
+                                          'Mark as Complete',
+                                          style: TextStyle(fontSize: 16),
+                                        ),
+                                        SizedBox(width: 10),
+                                        ReactiveSwitch(
+                                          formControlName: 'complete',
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                  ElevatedButton(
+                                    onPressed: () {
+                                      if (form.valid) {
+                                        print(form.value);
+                                      } else {
+                                        form.markAllAsTouched();
+                                      }
+                                    },
+                                    child: Text('Update Task'),
+                                  ),
+                                  SizedBox(height: 20),
+
+                                  ElevatedButton(
+                                    onPressed: () {
+                                      if (form.valid) {
+                                        print(form.value);
+                                      } else {
+                                        form.markAllAsTouched();
+                                      }
+                                    },
+                                    child: Text('Delete Task'),
+                                  ),
+                                ]
+                              : [
+                                  SizedBox(height: 20),
+
+                                  AppTextStyles().addEditDueText,
+                                  SizedBox(height: 40),
+
+                                  ElevatedButton(
+                                    onPressed: () {
+                                      if (form.valid) {
+                                        print(form.value);
+                                      } else {
+                                        form.markAllAsTouched();
+                                      }
+                                    },
+                                    child: Text('Submit'),
+                                  ),
+                                ]),
                         ],
                       ),
                     ),
